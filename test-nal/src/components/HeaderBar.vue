@@ -13,7 +13,6 @@ const redirectHome = (): void => {
 }
 
 const handleSearch = (): void => {
-  console.log(data)
   store.dispatch('postModule/searchPost', { query: data.value })
 }
 </script>

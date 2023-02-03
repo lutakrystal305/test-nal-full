@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useStore } from 'vuex'
 import { defineProps, ref, defineEmits } from 'vue'
-import { useField, useForm } from 'vee-validate'
 
 const store = useStore()
 

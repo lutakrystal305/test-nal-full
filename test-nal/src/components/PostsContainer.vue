@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useStore } from 'vuex'
-import { computed, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
   async setup() {
@@ -10,15 +10,10 @@ export default {
     const store = useStore()
     const posts = computed(() => store?.state.postModule?.posts)
     const onNavigatePage = (id: string): void => {
-      console.log(123)
       router.push({ name: 'about', params: { id } })
     }
     await store.dispatch('postModule/getPosts', { currentPage: 0, perPage: 10 })
-    // onMounted(async () => {
-    //   if (store) {
 
-    //   }
-    // })
     return { posts, onNavigatePage }
   },
 }

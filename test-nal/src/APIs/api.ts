@@ -3,7 +3,6 @@ import JSONBig from 'json-bigint'
 import { isEmpty, assign } from 'lodash'
 
 const BASE_URL = 'http://localhost:3005/'
-console.log(BASE_URL)
 const singletonEnforcer = Symbol()
 
 class AxiosClient {

@@ -1,12 +1,8 @@
 <script lang="ts" setup>
-import { useStore } from 'vuex'
-import { computed, onMounted, defineAsyncComponent, ref, reactive } from 'vue'
-import { useField, useForm } from 'vee-validate'
-import { editPostSchema } from '@/validates/createPost'
-import { useRouter, useRoute } from 'vue-router'
+import { onMounted, defineAsyncComponent, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import { getPostById } from '@/APIs/post.api'
 const route = useRoute()
-console.log(route.params)
 
 const PostItem = defineAsyncComponent(() => import('@/components/PostItem.vue'))
 const data = reactive({})

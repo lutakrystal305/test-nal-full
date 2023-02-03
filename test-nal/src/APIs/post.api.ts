@@ -14,7 +14,6 @@ async function getPosts(payload: IPayload) {
 }
 
 async function searchPost(payload: IQsearch) {
-  console.log(payload.query)
   const res = await AxiosClient.get(`/post/search?query=${payload.query}`)
   return res.data
 }

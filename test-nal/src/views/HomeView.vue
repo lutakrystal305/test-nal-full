@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useStore } from 'vuex'
-import { computed, onMounted, defineAsyncComponent, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useField, useForm } from 'vee-validate'
 import { createPostSchema } from '@/validates/createPost'
 import { PAGINATE } from '@/constant'
@@ -17,7 +17,7 @@ const isSearch = computed(() => store.state.postModule.isSearch)
 
 const openCreate = ref(false)
 
-const { handleSubmit, errors, isSubmitting, resetForm } = useForm({
+const { handleSubmit, errors, resetForm } = useForm({
   validationSchema: createPostSchema,
 })
 
@@ -25,7 +25,6 @@ const { value: name } = useField('name')
 const { value: des } = useField('des')
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log(values) // send data to API
   // reset the form and the field values to their initial values
   await store.dispatch('postModule/createPost', {
     name: values.name,
@@ -34,7 +33,6 @@ const onSubmit = handleSubmit(async (values) => {
       Math.random() * 100
     )}.jpg`,
   })
-  console.log(123123)
   await store.dispatch('postModule/getPosts', { currentPage: 0, perPage: 10 })
   resetForm()
   openCreate.value = false

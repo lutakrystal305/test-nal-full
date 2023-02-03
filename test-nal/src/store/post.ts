@@ -23,7 +23,6 @@ const actions = {
   async getPosts({ commit }: any, payload: IPayload): Promise<void> {
     commit(MUTATIONS.UPDATEPAGE, payload.currentPage)
     const res = await getPosts(payload)
-    console.log(res)
     commit(MUTATIONS.GET, res)
   },
   async editPost({ commit }: any, payload: IEditPayload): Promise<void> {
@@ -47,7 +46,6 @@ const actions = {
 
 const mutations = {
   [MUTATIONS.GET](state: IState, data: IResPost): void {
-    console.log(data)
     state.posts = data.posts
     state.currentPage = +data.currentPage
     state.totalPage = +data.totalPage
