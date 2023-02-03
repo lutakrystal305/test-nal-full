@@ -10,17 +10,21 @@ console.log(route.params)
 
 const PostItem = defineAsyncComponent(() => import('@/components/PostItem.vue'))
 const data = reactive({})
-onMounted(async () => {
+
+const getPost = async (): Promise<void> => {
   const res = await getPostById(route.params.id.toString())
   Object.assign(data, res)
-  console.log(PostItem)
+}
+
+onMounted(() => {
+  getPost()
 })
 </script>
 
 <template>
   <div class="about d-fex flex-column">
     <h1>This is an about page</h1>
-    <component :is="PostItem" :data="data" />
+    <component :is="PostItem" :data="data" @updatePost="getPost" />
   </div>
 </template>
 

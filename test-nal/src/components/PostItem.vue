@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { useStore } from 'vuex'
-import { computed, onMounted, defineProps, ref, watch } from 'vue'
+import { defineProps, ref, defineEmits } from 'vue'
 import { useField, useForm } from 'vee-validate'
-import { editPostSchema } from '@/validates/createPost'
 
 const store = useStore()
 
@@ -13,39 +12,40 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['updatePost'])
+
+const handleUpdatePost = () => {
+  emit('updatePost')
+}
+
 const checkEditOption = ref(false)
 const openEdit = ref(false)
 
-const { handleSubmit, errors, resetForm } = useForm({
-  validationSchema: editPostSchema,
-})
-
-let { value: desEdit } = useField('desEdit')
+const desEdit = ref(props.data.des)
+const error = ref(false)
 
 const onClickOption = () => {
   checkEditOption.value = !checkEditOption.value
-  desEdit = props.data.des
+  desEdit.value = props.data.des
 }
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values)
-  store.dispatch('postModule/editPost', {
-    id: props.data.id,
-    des: values.desEdit,
-  })
-  resetForm()
-})
-onMounted(() => {
-  desEdit = props.data.des
-})
-watch(
-  () => props.data,
-  (prev, next) => {
-    if (next) {
-      desEdit = props.data.des
-    }
+const handleInput = (evt) => {
+  if (evt.target.value.length < 6) {
+    error.value = true
+  } else {
+    error.value = false
   }
-)
+}
+
+const onSubmit = async () => {
+  await store.dispatch('postModule/editPost', {
+    id: props.data.id,
+    des: desEdit.value,
+  })
+  handleUpdatePost()
+  desEdit.value = ''
+  openEdit.value = false
+}
 </script>
 
 <template>
@@ -64,27 +64,28 @@ watch(
           <div class="img my-2"><img :src="data.avatar" alt="avatr" /></div>
           <div class="d-flex flex-column ml-3">
             <h5 class="mt-0 mb-1 text-left">{{ data.name }}</h5>
-            <form
-              @submit="onSubmit"
+            <div
+              class="d-flex flex-column justify-content-center align-items-center my-3 form"
               v-if="openEdit"
-              class="my-4 d-flex flex-column justify-content-center align-items-center"
             >
               <textarea
                 name="desEdit"
                 id="desEdit"
                 v-model="desEdit"
                 type="text"
+                @input="handleInput"
               ></textarea>
-              <span :class="{ isActiveErr: errors.desEdit }">{{
-                errors.desEdit
-              }}</span>
+              <p :class="{ isActiveErr: error }" v-if="error">
+                The min description is 6 character
+              </p>
               <button
+                @click="onSubmit"
                 class="my-2 btn"
-                :class="{ 'btn-primary': !errors.desEdit }"
+                :class="{ 'btn-primary': !error }"
               >
                 OK
               </button>
-            </form>
+            </div>
             <p v-else class="text-left">{{ data.des }}</p>
           </div>
         </div>
@@ -123,7 +124,7 @@ watch(
     }
   }
 }
-form {
+.form {
   textarea {
     width: 300px;
     height: 125px;

@@ -10,6 +10,8 @@ module.exports.get = async (req, res, next) => {
     const result = [
       ...posts.slice(+currentPage * +perPage, (+currentPage + 1) * +perPage),
     ];
+    console.log(result[0]);
+    await new Promise((resolve, reject) => setTimeout(resolve, 2000));
     res.json({
       posts: result,
       currentPage,
@@ -27,7 +29,8 @@ module.exports.get = async (req, res, next) => {
 module.exports.getById = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const result = posts.find((x) => x.id.toString() === id.toString());
+    const result = posts.find((x) => x.id?.toString() === id.toString());
+    console.log(result);
     res.json(result);
   } catch (error) {
     next(error);
@@ -64,15 +67,17 @@ module.exports.create = async (req, res, next) => {
 module.exports.update = async (req, res, next) => {
   try {
     const { des } = req.body;
+    console.log(des);
     const id = req.params.id;
     const result = [
       ...posts.map((x) => {
-        if (x.id === id) return (x.des = des);
+        if (+x.id === +id) return { ...x, des };
         return x;
       }),
     ];
-    fs.writeFileSync(pathFile, JSON.stringify(result));
-    res.json({ posts: result });
+    await fs.writeFileSync(pathFile, JSON.stringify(result));
+    await new Promise((resolve, reject) => setTimeout(resolve, 2000));
+    res.json({ posts: [] });
   } catch (error) {
     next(error);
   }

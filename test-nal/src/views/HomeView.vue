@@ -62,103 +62,102 @@ watch(
 )
 </script>
 <template>
-  <Suspense>
-    <template #default>
-      <div
-        class="home w-100 d-flex flex-column justify-content-center align-items-center h-100"
+  <div
+    class="home w-100 d-flex flex-column justify-content-center align-items-center h-100"
+  >
+    <div class="hello my-4">
+      <h1>My Blogs</h1>
+    </div>
+    <div v-if="openCreate">
+      <form
+        @submit="onSubmit"
+        class="d-flex flex-column justify-content-center align-items-center"
       >
-        <div class="hello my-4">
-          <h1>My Blogs</h1>
-        </div>
-        <div v-if="openCreate">
-          <form
-            @submit="onSubmit"
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <input
-              id="name"
-              v-model="name"
-              type="text"
-              name="name"
-              placeholder="name"
-              class="px-3 py-3 my-2"
-            />
-            <span :class="{ isActiveErr: errors.name }">{{ errors.name }}</span>
-            <textarea
-              id="des"
-              v-model="des"
-              type="text"
-              name="des"
-              placeholder="des"
-              class="px-3 py-3 my-2"
-            />
-            <span :class="{ isActiveErr: errors.des }">{{ errors.des }}</span>
-            <button
-              :class="{
-                'btn-primary':
-                  !errors.des &&
-                  !errors.name &&
-                  name.length > 0 &&
-                  des.length > 0,
-              }"
-              class="btn"
-            >
-              Create Blog
-            </button>
-          </form>
-        </div>
-        <div v-else>
-          <button @click="openCreate = true">Create Blog</button>
-        </div>
+        <input
+          id="name"
+          v-model="name"
+          type="text"
+          name="name"
+          placeholder="name"
+          class="px-3 py-3 my-2"
+        />
+        <span :class="{ isActiveErr: errors.name }">{{ errors.name }}</span>
+        <textarea
+          id="des"
+          v-model="des"
+          type="text"
+          name="des"
+          placeholder="des"
+          class="px-3 py-3 my-2"
+        />
+        <span :class="{ isActiveErr: errors.des }">{{ errors.des }}</span>
+        <button
+          :class="{
+            'btn-primary':
+              !errors.des && !errors.name && name.length > 0 && des.length > 0,
+          }"
+          class="btn"
+        >
+          Create Blog
+        </button>
+      </form>
+    </div>
+    <div v-else>
+      <button @click="openCreate = true">Create Blog</button>
+    </div>
+    <Suspense>
+      <template #default>
         <component :is="PostsContainer" />
-        <div class="pagination-custom" v-if="!isSearch">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item" @click="onChangePage(PAGINATE.DECRE)">
-                <a
-                  class="page-link"
-                  href="#"
-                  aria-label="Previous"
-                  v-if="currentPage !== 1"
-                >
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li
-                class="page-item"
-                v-if="currentPage !== 1"
-                @click="onChangePage(PAGINATE.DECRE)"
-              >
-                <a class="page-link" href="#">{{ currentPage - 1 }}</a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="#">{{ currentPage }}</a>
-              </li>
-              <li
-                class="page-item"
-                v-if="currentPage < totalPage"
-                @click="onChangePage(PAGINATE.INCRE)"
-              >
-                <a class="page-link" href="#">{{ currentPage + 1 }}</a>
-              </li>
-              <li
-                class="page-item"
-                v-if="currentPage < totalPage"
-                @click="onChangePage(PAGINATE.INCRE)"
-              >
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+      </template>
+      <template #fallback>
+        <div class="spinner-border text-success my-4" role="status">
+          <span class="sr-only">Loading...</span>
         </div>
-      </div>
-    </template>
-    <template #fallback>
-      <div><p>....lOADING</p></div>
-    </template>
-  </Suspense>
+      </template>
+    </Suspense>
+    <div class="pagination-custom" v-if="!isSearch && totalPage > 0">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item" @click="onChangePage(PAGINATE.DECRE)">
+            <a
+              class="page-link"
+              href="#"
+              aria-label="Previous"
+              v-if="currentPage !== 1"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li
+            class="page-item"
+            v-if="currentPage !== 1"
+            @click="onChangePage(PAGINATE.DECRE)"
+          >
+            <a class="page-link" href="#">{{ currentPage - 1 }}</a>
+          </li>
+          <li class="page-item active">
+            <a class="page-link" href="#">{{ currentPage }}</a>
+          </li>
+          <li
+            class="page-item"
+            v-if="currentPage < totalPage"
+            @click="onChangePage(PAGINATE.INCRE)"
+          >
+            <a class="page-link" href="#">{{ currentPage + 1 }}</a>
+          </li>
+          <li
+            class="page-item"
+            v-if="currentPage < totalPage"
+            @click="onChangePage(PAGINATE.INCRE)"
+          >
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
 </template>
 <style scoped lang="scss">
 .isActiveErr {

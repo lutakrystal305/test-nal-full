@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 app.use('/post', router);
 
-const port = process.env.PORT || 9999;
+const port = process.env.PORT || 3005;
 
 server.listen(port, () => {
   console.log('listen on port ', port);

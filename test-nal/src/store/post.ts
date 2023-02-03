@@ -14,7 +14,7 @@ const state: IState = {
   posts: [],
   currentPage: 0,
   perPage: 10,
-  totalPage: 10,
+  totalPage: 0,
   isSearch: false,
   isLoading: false,
 }

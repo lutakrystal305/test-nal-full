@@ -29,7 +29,9 @@ async function createPost(data: ICreatePayload) {
 }
 
 async function editPost(data: IEditPayload) {
-  const res = await AxiosClient.post(`/post/update/${data.id}`, data)
+  const res = await AxiosClient.post(`/post/update/${data.id}`, {
+    des: data.des,
+  })
   return res.data
 }
 export { getPosts, getPostById, createPost, editPost, searchPost }
